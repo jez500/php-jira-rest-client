@@ -22,10 +22,11 @@ class ProjectService extends \JiraRestApi\JiraClient
      */
     public function getAllProjects($paramArray = [])
     {
-        $ret = $this->exec($this->uri.$this->toHttpQueryParameter($paramArray), null);
+        $ret = $this->exec($this->uri."/search".$this->toHttpQueryParameter($paramArray), null);
+        $ret = json_decode($ret, false);
 
         $prjs = $this->json_mapper->mapArray(
-            json_decode($ret, false), new \ArrayObject(), '\JiraRestApi\Project\Project'
+            $ret->values, new \ArrayObject(), '\JiraRestApi\Project\Project'
         );
 
         return $prjs;
